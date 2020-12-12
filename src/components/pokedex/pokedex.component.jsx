@@ -14,7 +14,6 @@ class Pokedex extends React.Component {
         };
 
         this.selectPokemon = this.selectPokemon.bind(this);
-        this.getStatus = this.getStatus.bind(this);
         this.addPokemon = this.addPokemon.bind(this);
         this.removePokemon = this.removePokemon.bind(this);
         this.closeModal = this.closeModal.bind(this);
@@ -30,74 +29,6 @@ class Pokedex extends React.Component {
         let myList = [...this.state.myList];
         myList[index] = {...myList[index], active: active};
         this.setState({ myList });
-      }
-
-      getStatus(pokemon){
-
-        if(pokemon){
-
-            let {hp, attacks, weaknesses } = pokemon;
-
-            if(hp){
-              if(parseInt(hp) > 100){
-                  hp = 100;
-              }else if (isNaN(hp)){
-                  hp = 0;
-              }
-            }
-
-            pokemon.hpStatus = hp || 0;
-
-            let str = 0;
-            if(attacks && attacks.length){
-              str = attacks.length * 50;
-              if(str > 100){
-                  str = 100;
-              }else if (str === 1){
-                  str = 50;
-              }else if (str === 2){
-                  str = 100;
-              }
-            }
-
-            pokemon.strStatus = str;
-
-            let weakness = 0;
-            if(weaknesses && weaknesses.length){
-              weakness = weaknesses.length * 100;
-              if((weakness > 100) || (weakness === 1)){
-                  weakness = 100;
-              }else{
-                weakness = 0;
-              }
-            }
-
-            pokemon.weakStatus = weakness;
-
-            let damage = 0;
-            if(attacks && attacks.length){
-                let dmg = 0;
-                for(let i = 0; i < attacks.length; i++){
-                    let atk = attacks[i];
-                    if(atk.damage && !isNaN(atk.damage)){
-                        dmg += parseInt(atk.damage.replace(/[^0-9]/gi, ""));
-                    }
-                }
-                damage = dmg;
-            }
-
-
-            let happy = (((parseInt(hp) / 10) + (damage /10 ) + 10 - (weakness)) / 5) || 0;
-
-            pokemon.happyStatus = Math.ceil(happy);
-            
-
-        }
-
-        pokemon.active = false;
-
-        return pokemon;
-
       }
 
       addPokemon(pokemon){
