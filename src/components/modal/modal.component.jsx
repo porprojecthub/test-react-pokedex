@@ -130,16 +130,6 @@ class Modal extends React.Component {
       selectPokemon(pokemon){
         if(pokemon){
           this.props.onAddPokemon(pokemon); 
-          for(let i = 0; i < this.state.masterList.length ; i++){
-            let p = this.state.masterList[i];
-            if(p.id.trim().toUpperCase() === pokemon.id.trim().toUpperCase()){
-              let masterList = [...this.state.masterList];
-                  masterList.splice(i, 1);
-                  this.setState({masterList: masterList});
-              break;
-            }
-          }
-          this.setState({dataList: this.state.masterList});
           this.searchPokemon();
         }
   
