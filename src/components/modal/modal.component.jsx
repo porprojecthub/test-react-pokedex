@@ -91,13 +91,25 @@ class Modal extends React.Component {
       }
 
       async searchPokemon(){
-        let limit = this.state.criteria.limit || '';
-        let name = this.state.criteria.name || '';
-        let type = this.state.criteria.type || '';
-  
-       let response = await axios.get(`http://localhost:3030/api/cards?limit=${limit}&name=${name}&type=${type}`).then(resp => resp.data.cards.map(pokemon => {
-            return this.getStatus(pokemon);
-          }));
+       let name = this.state.criteria.name || '';
+       let type = this.state.criteria.type || '';
+       let limit = this.state.criteria.limit || '';
+
+       let params = new URLSearchParams();
+       
+        
+        if(name) params.append("name", name);
+        if(type) params.append("type", type);
+        if(limit) params.append("limit", limit);
+
+        let queryParams = {
+          params: params
+        };
+       
+ 
+        let response = await axios.get(`http://localhost:3030/api/cards`,queryParams).then(resp => resp.data.cards.map(pokemon => {
+           return this.getStatus(pokemon);
+         }));
 
       this.setState(() => ({masterList: response}));
   
@@ -208,10 +220,8 @@ class Modal extends React.Component {
         return (
 <div id="myModal" className="modal" ref={this.myModal}  onClick={this.closeModal}>
   <div className="modal-content">
-    <div className="container">
-  <div className="content-modal">
-    <div className="form-input">
-      <div className="input-container" style={{paddingLeft:'30px'}}>
+  <div className="form-input">
+      <div className="input-container">
       <input className="input-field" style={{fontSize:'20px'}} type="text" placeholder="Pokemon Name" name="name" value={this.state.criteria.name} onChange={this.handleCriteriaChange}/>
         <input className="input-field" style={{fontSize:'20px'}} type="text" placeholder="Pokemon Type" name="type" value={this.state.criteria.type} onChange={this.handleCriteriaChange}/>
         <select className="input-field" style={{fontSize:'20px'}} name="limit" value={this.state.criteria.limit}  onChange={this.handleCriteriaChange}>
@@ -222,6 +232,8 @@ class Modal extends React.Component {
       <i className="fa fa-search icon" style={{color:'#e44c4c',fontSize:'40px',cursor:'pointer'}} onClick={this.searchPokemon}/> 
       </div>
     </div>
+    <div className="container">
+  <div className="content-modal">
     {this.state.dataList.map((pokemon,index) => (
     <div className="cards-modal" key={pokemon.id}
     onMouseOver={()=> {this.handleMouse(index,true)}}
